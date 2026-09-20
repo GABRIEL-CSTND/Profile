@@ -121,7 +121,7 @@ document.addEventListener('mousemove', (e) => {
 
 // ── Game: Eat particles and explode ───────────────────────────────────────────
 let eatenCount = 0;
-const MAX_CURSOR_SIZE = 150;
+const MAX_CURSOR_SIZE = 300;
 let currentCursorRadius = 15;
 
 function updateCursorSize() {
@@ -132,10 +132,28 @@ function updateCursorSize() {
   document.documentElement.style.setProperty('--cursor-size', newSize + 'px');
 }
 
+let isExploding = false;
+
 document.addEventListener('keydown', (e) => {
-  if (e.code === 'Space' && eatenCount > 0) {
+  if (e.code === 'Space' && eatenCount > 0 && !isExploding) {
     e.preventDefault(); // Prevent scrolling
-    explodeCursor();
+    isExploding = true;
+    
+    // Smoothly shrink the cursor over 1.5 seconds (anticipation/charging effect)
+    cursorDot.style.transition = 'width 1s cubic-bezier(0.8, 0, 0.2, 1), height 1s cubic-bezier(0.8, 0, 0.2, 1), background .2s';
+    
+    // Shrink visually back to 10px, and stop eating new dots while charging
+    document.documentElement.style.setProperty('--cursor-size', '10px');
+    currentCursorRadius = 0; 
+
+    // Wait 1.5s then trigger the explosion
+    setTimeout(() => {
+      explodeCursor();
+      isExploding = false;
+      
+      // Restore the fast, snappy transition for normal movement
+      cursorDot.style.transition = 'width .1s var(--ease), height .1s var(--ease), background .2s';
+    }, 1000);
   }
 });
 
