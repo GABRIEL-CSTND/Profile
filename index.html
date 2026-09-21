@@ -37,10 +37,19 @@
        NAV
   ════════════════════════════ -->
   <nav id="navbar">
-    <div class="nav-logo">
-      <span class="logo-bracket">&lt;</span>
-      <span class="logo-name">gab</span>
-      <span class="logo-bracket">/&gt;</span>
+    <div class="nav-left">
+      <div class="nav-logo">
+        <span class="logo-bracket">&lt;</span>
+        <span class="logo-name">gab</span>
+        <span class="logo-bracket">/&gt;</span>
+      </div>
+      <div class="nav-toggle-wrap">
+        <label class="toggle-switch">
+          <input type="checkbox" id="cursor-grow-toggle" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Cursor Grow</span>
+      </div>
     </div>
     <ul class="nav-links">
       <li><a href="#about" class="nav-link">About</a></li>
@@ -94,10 +103,16 @@
         <a href="#contact" class="btn btn-ghost" id="hero-cta-contact">Let's chat</a>
       </div>
 
-      <!-- Scroll hint -->
-      <div class="scroll-hint">
-        <div class="scroll-line"></div>
-        <span>scroll</span>
+      <!-- Scroll hint + cursor hint side by side -->
+      <div class="hero-hints">
+        <div class="scroll-hint">
+          <div class="scroll-line"></div>
+          <span>scroll</span>
+        </div>
+        <div class="cursor-hint" id="cursor-hint">
+          <span class="cursor-hint-icon">🖱️</span>
+          <span>Cursor may grow — press <kbd>Space</kbd> to release</span>
+        </div>
       </div>
     </div>
 

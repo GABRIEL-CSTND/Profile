@@ -185,6 +185,12 @@ body.cursor-hover #cursor-ring {
   box-shadow: 0 4px 32px rgba(0,0,0,.4);
 }
 
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .nav-logo {
   font-family: var(--font-disp);
   font-size: 1.2rem;
@@ -193,6 +199,58 @@ body.cursor-hover #cursor-ring {
 }
 .logo-bracket { color: var(--cyan); }
 .logo-name    { color: var(--text); }
+
+.nav-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.toggle-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: none;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  transition: .3s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--text-dim);
+  border-radius: 50%;
+  transition: .3s;
+}
+input:checked + .slider {
+  background-color: rgba(34,211,238,0.2);
+  border-color: var(--cyan);
+}
+input:checked + .slider:before {
+  transform: translateX(14px);
+  background-color: var(--cyan);
+}
+
 
 .nav-links {
   display: flex;
@@ -450,18 +508,46 @@ body.cursor-hover #cursor-ring {
   transform: translateY(-2px);
 }
 
+.hero-hints {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  animation: slide-up .8s var(--ease) .7s both;
+}
+
 /* Scroll hint */
 .scroll-hint {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: .5rem;
-  margin-top: 3rem;
   font-size: .7rem;
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--text-muted);
-  animation: slide-up .8s var(--ease) .7s both;
+}
+
+.cursor-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  background: rgba(167, 139, 250, 0.05);
+  border: 1px solid rgba(167, 139, 250, 0.1);
+  border-radius: var(--r-sm);
+  transition: opacity 0.3s var(--ease);
+}
+.cursor-hint kbd {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .scroll-line {

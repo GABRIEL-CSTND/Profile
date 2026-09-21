@@ -124,6 +124,23 @@ let eatenCount = 0;
 const MAX_CURSOR_SIZE = 300;
 let currentCursorRadius = 15;
 
+const cursorGrowToggle = document.getElementById('cursor-grow-toggle');
+const cursorHint = document.getElementById('cursor-hint');
+
+// Handle toggle changes
+cursorGrowToggle.addEventListener('change', () => {
+  if (!cursorGrowToggle.checked) {
+    cursorHint.style.opacity = '0';
+    cursorHint.style.pointerEvents = 'none';
+    if (eatenCount > 0 && !isExploding) {
+      explodeCursor(); // clear it out if disabled while big
+    }
+  } else {
+    cursorHint.style.opacity = '1';
+    cursorHint.style.pointerEvents = 'auto';
+  }
+});
+
 function updateCursorSize() {
   const baseSize = 10;
   const growth = eatenCount * 1.5; 
@@ -225,8 +242,8 @@ class Particle {
     const dy   = mouse.y - this.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
 
-    // EAT PARTICLE (if not heavily hovered on interactive elements)
-    if (dist < currentCursorRadius && !document.body.classList.contains('cursor-hover')) {
+    // EAT PARTICLE (if enabled, and not hovered on interactive elements)
+    if (cursorGrowToggle.checked && dist < currentCursorRadius && !document.body.classList.contains('cursor-hover')) {
       eatenCount++;
       updateCursorSize();
       this.reset();
