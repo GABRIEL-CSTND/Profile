@@ -1031,27 +1031,140 @@ input:checked + .slider:before {
   50%      { opacity: 0; }
 }
 
+
 /* ═══════════════════════════════════════
-   PROJECTS
+   PROJECTS — Card Deck
 ═══════════════════════════════════════ */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+
+/* Outer row: [left pile] [stage] [right pile] */
+.deck-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 2rem;
+  margin-top: 3rem;
+  user-select: none;
 }
 
+/* ── Side piles ─────────────────────────────────── */
+.deck-side {
+  position: relative;
+  width: 90px;
+  height: 320px;
+  flex-shrink: 0;
+}
+
+/* Ghost "card back" layers that give the stacked look */
+.deck-back {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: transform 0.4s var(--ease), opacity 0.4s;
+}
+
+/* Left side: cards tilted slightly counter-clockwise */
+.deck-side-left .deck-back-2 { transform: rotate(-8deg) translate(-4px, 4px); opacity: 0.35; }
+.deck-side-left .deck-back-1 { transform: rotate(-4deg) translate(-2px, 2px); opacity: 0.55; }
+
+/* Right side: cards tilted slightly clockwise */
+.deck-side-right .deck-back-2 { transform: rotate( 8deg) translate( 4px, 4px); opacity: 0.35; }
+.deck-side-right .deck-back-1 { transform: rotate( 4deg) translate( 2px, 2px); opacity: 0.55; }
+
+/* Badge showing count on each pile */
+.deck-badge {
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  transition: transform 0.2s var(--ease-spring), opacity 0.3s;
+  white-space: nowrap;
+}
+
+/* Hide pile shadows when that pile is empty */
+.deck-side.is-empty .deck-back { opacity: 0; pointer-events: none; }
+.deck-side.is-empty .deck-badge { opacity: 0; }
+
+/* ── Stage: active card sits here ──────────────────── */
+.deck-stage {
+  position: relative;
+  width: 340px;
+  height: 460px;
+  flex-shrink: 0;
+}
+
+/* ── Card base ──────────────────────────────────────── */
 .project-card {
+  position: absolute;
+  inset: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   overflow: hidden;
-  transition: all .4s var(--ease);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.35s ease,
+              box-shadow 0.3s,
+              border-color 0.3s;
+  /* Default: hidden off to the right (right draw pile peek) */
+  transform: translateX(60px) rotate(4deg) scale(0.88);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.project-card:hover {
+/* Active center card */
+.project-card[data-state="center"] {
+  transform: translateX(0) rotate(0deg) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 10;
+  box-shadow: 0 24px 64px rgba(0,0,0,.5);
+}
+
+.project-card[data-state="center"]:hover {
   border-color: var(--border-h);
-  transform: translateY(-8px);
-  box-shadow: 0 32px 80px rgba(0,0,0,.4);
+}
+
+/* Discard pile — left side */
+.project-card[data-state="left-0"] {
+  transform: translateX(-560px) rotate(-6deg) scale(0.82);
+  opacity: 0;
+  z-index: 3;
+}
+.project-card[data-state="left-1"] {
+  transform: translateX(-590px) rotate(-10deg) scale(0.78);
+  opacity: 0;
+  z-index: 2;
+}
+
+/* Draw pile — right side */
+.project-card[data-state="right-0"] {
+  transform: translateX(560px) rotate(6deg) scale(0.82);
+  opacity: 0;
+  z-index: 3;
+}
+.project-card[data-state="right-1"] {
+  transform: translateX(590px) rotate(10deg) scale(0.78);
+  opacity: 0;
+  z-index: 2;
+}
+
+/* Deck hint */
+.deck-hint {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .project-img-wrap {

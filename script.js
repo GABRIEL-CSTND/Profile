@@ -573,7 +573,95 @@ Object.entries(tagTexts).forEach(([id, texts]) => {
 });
 
 // ── Moving Grid — constant gentle flow (no scroll interaction) ───────────────
-// The grid animates at a fixed speed. To change the pace, adjust --warp-duration.
-document.documentElement.style.setProperty('--warp-duration', '3s');   // speed of lines
-document.documentElement.style.setProperty('--grid-size', '60px');     // cell size
-document.documentElement.style.setProperty('--grid-line-opacity', '0.07'); // line brightness
+document.documentElement.style.setProperty('--warp-duration', '3s');
+document.documentElement.style.setProperty('--grid-size', '60px');
+document.documentElement.style.setProperty('--grid-line-opacity', '0.07');
+
+// ── Card Deck — Projects ──────────────────────────────────────────────────────
+(function () {
+  const stage     = document.getElementById('deck-stage');
+  const leftSide  = document.querySelector('.deck-side-left');
+  const rightSide = document.querySelector('.deck-side-right');
+  const badgeL    = document.getElementById('badge-left');
+  const badgeR    = document.getElementById('badge-right');
+
+  if (!stage) return;
+
+  const cards = Array.from(stage.querySelectorAll('.project-card'));
+  const total = cards.length;
+
+  // State: indices of cards in each zone
+  let leftDeck  = [];          // discard pile
+  let center    = 0;           // active card index
+  let rightDeck = cards.map((_, i) => i).slice(1); // draw pile
+
+  // ── Apply state to DOM ───────────────────────────────────────────────────
+  function applyState() {
+    // Center card
+    cards[center].dataset.state = 'center';
+
+    // Left discard pile (most recent = index 0 = top of pile)
+    leftDeck.slice().reverse().forEach((idx, pos) => {
+      cards[idx].dataset.state = `left-${pos}`;
+    });
+
+    // Right draw pile (first = index 0 = next to deal)
+    rightDeck.forEach((idx, pos) => {
+      cards[idx].dataset.state = `right-${pos}`;
+    });
+
+    // Update pile badges and empty state
+    const lCount = leftDeck.length;
+    const rCount = rightDeck.length;
+
+    badgeL.textContent = lCount;
+    badgeR.textContent = rCount;
+    leftSide.classList.toggle('is-empty', lCount === 0);
+    rightSide.classList.toggle('is-empty', rCount === 0);
+  }
+
+  // ── Deal next (discard left, draw from right) ─────────────────────────────
+  function dealNext() {
+    if (rightDeck.length === 0) return;
+    leftDeck.push(center);
+    center = rightDeck.shift();
+    applyState();
+  }
+
+  // ── Take back (return to right, restore from left) ────────────────────────
+  function dealPrev() {
+    if (leftDeck.length === 0) return;
+    rightDeck.unshift(center);
+    center = leftDeck.pop();
+    applyState();
+  }
+
+  // ── Drag / Swipe to deal ──────────────────────────────────────────────────
+  const THRESHOLD = 60; // px
+  let startX = 0;
+  let dragging = false;
+
+  stage.addEventListener('mousedown', e => { dragging = true; startX = e.pageX; });
+  window.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    const dx = e.pageX - startX;
+    if (Math.abs(dx) < THRESHOLD) return;
+    if (dx < 0) dealNext(); else dealPrev();
+  });
+
+  stage.addEventListener('touchstart', e => {
+    dragging = true;
+    startX = e.touches[0].pageX;
+  }, { passive: true });
+  window.addEventListener('touchend', e => {
+    if (!dragging) return;
+    dragging = false;
+    const dx = e.changedTouches[0].pageX - startX;
+    if (Math.abs(dx) < THRESHOLD) return;
+    if (dx < 0) dealNext(); else dealPrev();
+  });
+
+  // Initialise
+  applyState();
+})();

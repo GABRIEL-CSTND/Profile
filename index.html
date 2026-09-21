@@ -317,66 +317,82 @@
       </div>
       <h2 class="section-title">Things I've built</h2>
 
-      <div class="projects-grid">
+      <!-- Card Deck -->
+      <div class="deck-wrapper">
 
-        <article class="project-card reveal" id="project-1">
-          <div class="project-img-wrap">
-            <div class="project-img project-img-1"></div>
-            <div class="project-overlay">
-              <a href="#" class="project-link" aria-label="View Project 1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-              </a>
-            </div>
-          </div>
-          <div class="project-info">
-            <span class="project-num">01</span>
-            <h3 class="project-title">Cosmic Dashboard</h3>
-            <p class="project-desc">A real-time analytics dashboard with stunning data visualizations and a space-inspired dark theme.</p>
-            <div class="project-tags">
-              <span>React</span><span>D3.js</span><span>Node.js</span>
-            </div>
-          </div>
-        </article>
+        <!-- Left discard pile -->
+        <div class="deck-side deck-side-left">
+          <div class="deck-back deck-back-2"></div>
+          <div class="deck-back deck-back-1"></div>
+          <div class="deck-badge" id="badge-left">0</div>
+        </div>
 
-        <article class="project-card reveal" id="project-2">
-          <div class="project-img-wrap">
-            <div class="project-img project-img-2"></div>
-            <div class="project-overlay">
-              <a href="#" class="project-link" aria-label="View Project 2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-              </a>
-            </div>
-          </div>
-          <div class="project-info">
-            <span class="project-num">02</span>
-            <h3 class="project-title">Neon Chat</h3>
-            <p class="project-desc">Real-time messaging app with end-to-end encryption, emoji reactions, and a vibrant neon UI.</p>
-            <div class="project-tags">
-              <span>Socket.io</span><span>Express</span><span>MongoDB</span>
-            </div>
-          </div>
-        </article>
+        <!-- Stage: all 3 cards are absolutely positioned here -->
+        <div class="deck-stage" id="deck-stage">
 
-        <article class="project-card reveal" id="project-3">
-          <div class="project-img-wrap">
-            <div class="project-img project-img-3"></div>
-            <div class="project-overlay">
-              <a href="#" class="project-link" aria-label="View Project 3">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-              </a>
+          <article class="project-card" id="project-1">
+            <div class="project-img-wrap">
+              <div class="project-img project-img-1"></div>
+              <div class="project-overlay">
+                <a href="#" class="project-link" aria-label="View Project 1">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
             </div>
-          </div>
-          <div class="project-info">
-            <span class="project-num">03</span>
-            <h3 class="project-title">Pixel Garden</h3>
-            <p class="project-desc">An interactive pixel art creator with layers, palette management, and one-click GIF export.</p>
-            <div class="project-tags">
-              <span>Canvas API</span><span>Vanilla JS</span><span>CSS</span>
+            <div class="project-info">
+              <span class="project-num">01</span>
+              <h3 class="project-title">Cosmic Dashboard</h3>
+              <p class="project-desc">A real-time analytics dashboard with stunning data visualizations and a space-inspired dark theme.</p>
+              <div class="project-tags"><span>React</span><span>D3.js</span><span>Node.js</span></div>
             </div>
-          </div>
-        </article>
+          </article>
 
-      </div>
+          <article class="project-card" id="project-2">
+            <div class="project-img-wrap">
+              <div class="project-img project-img-2"></div>
+              <div class="project-overlay">
+                <a href="#" class="project-link" aria-label="View Project 2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-num">02</span>
+              <h3 class="project-title">Neon Chat</h3>
+              <p class="project-desc">Real-time messaging app with end-to-end encryption, emoji reactions, and a vibrant neon UI.</p>
+              <div class="project-tags"><span>Socket.io</span><span>Express</span><span>MongoDB</span></div>
+            </div>
+          </article>
+
+          <article class="project-card" id="project-3">
+            <div class="project-img-wrap">
+              <div class="project-img project-img-3"></div>
+              <div class="project-overlay">
+                <a href="#" class="project-link" aria-label="View Project 3">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-num">03</span>
+              <h3 class="project-title">Pixel Garden</h3>
+              <p class="project-desc">An interactive pixel art creator with layers, palette management, and one-click GIF export.</p>
+              <div class="project-tags"><span>Canvas API</span><span>Vanilla JS</span><span>CSS</span></div>
+            </div>
+          </article>
+
+        </div><!-- /deck-stage -->
+
+        <!-- Right draw pile -->
+        <div class="deck-side deck-side-right">
+          <div class="deck-back deck-back-2"></div>
+          <div class="deck-back deck-back-1"></div>
+          <div class="deck-badge" id="badge-right">2</div>
+        </div>
+
+      </div><!-- /deck-wrapper -->
+      <p class="deck-hint">← drag to deal</p>
+
     </div>
   </section>
 
