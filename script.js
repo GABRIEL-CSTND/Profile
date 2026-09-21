@@ -722,3 +722,47 @@ document.documentElement.style.setProperty('--grid-line-opacity', '0.07');
   });
 })();
 
+// ── Background Music Controller ─────────────────────────────────────────────
+(function () {
+  const musicToggle = document.getElementById('music-toggle');
+  const bgAudio = document.getElementById('bg-audio');
+
+  if (!musicToggle || !bgAudio) return;
+
+  // Set background volume to 15%
+  bgAudio.volume = 0.15;
+
+  function playAudio() {
+    bgAudio.play().catch(() => {
+      // Browser autoplay policy might defer playback until user click
+    });
+  }
+
+  function pauseAudio() {
+    bgAudio.pause();
+  }
+
+  musicToggle.addEventListener('change', function () {
+    if (this.checked) {
+      playAudio();
+    } else {
+      pauseAudio();
+    }
+  });
+
+  // Start audio on first user click/touch if toggle is ON
+  function onFirstInteraction() {
+    if (musicToggle.checked && bgAudio.paused) {
+      playAudio();
+    }
+    window.removeEventListener('click', onFirstInteraction);
+    window.removeEventListener('keydown', onFirstInteraction);
+    window.removeEventListener('touchstart', onFirstInteraction);
+  }
+
+  window.addEventListener('click', onFirstInteraction);
+  window.addEventListener('keydown', onFirstInteraction);
+  window.addEventListener('touchstart', onFirstInteraction);
+})();
+
+
