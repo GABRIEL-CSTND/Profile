@@ -1181,47 +1181,52 @@ input:checked + .slider:before {
 .project-card:hover .project-img { transform: scale(1.06); }
 
 /* Unique gradient thumbnails */
+/* Gala — collaborative org project: deep purple → gold, theater masks */
 .project-img-1 {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0c1a2e 100%);
+  background: linear-gradient(135deg, #0d0a1e 0%, #2d1b6e 40%, #1a0f3d 70%, #2a1500 100%);
   position: relative;
 }
 .project-img-1::after {
-  content: '📊';
+  content: '🎭';
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 4rem;
-  opacity: .5;
+  opacity: .55;
 }
 
+/* VetClinicApp — veterinary clinic: teal → deep green, paw print */
 .project-img-2 {
-  background: linear-gradient(135deg, #0f172a 0%, #1a0726 40%, #0c2a1e 100%);
+  background: linear-gradient(135deg, #051a12 0%, #0a3d2e 40%, #063324 70%, #001a1a 100%);
+  position: relative;
 }
 .project-img-2::after {
-  content: '💬';
+  content: '🐾';
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 4rem;
-  opacity: .5;
+  opacity: .55;
 }
 
+/* Hotel Reservation — hospitality: deep burgundy → warm amber, hotel building */
 .project-img-3 {
-  background: linear-gradient(135deg, #0f172a 0%, #1a1a0a 40%, #0a1a1a 100%);
+  background: linear-gradient(135deg, #1a0a00 0%, #3d1a00 35%, #2a1500 65%, #1a0e00 100%);
+  position: relative;
 }
 .project-img-3::after {
-  content: '🎨';
+  content: '🏨';
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 4rem;
-  opacity: .5;
+  opacity: .55;
 }
 
 .project-overlay {
