@@ -1176,6 +1176,17 @@ input:checked + .slider:before {
 .project-img {
   width: 100%; height: 100%;
   transition: transform .5s var(--ease);
+  position: relative;
+}
+
+/* Drop project-N.jpg into assets/ to override the gradient fallback */
+.card-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2; /* covers the gradient + emoji fallback when image loads */
 }
 
 .project-card:hover .project-img { transform: scale(1.06); }
