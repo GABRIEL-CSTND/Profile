@@ -666,9 +666,9 @@ body.cursor-hover #cursor-ring {
 }
 
 .section-dark {
-  background: rgba(13, 17, 32, 0.6); /* Semi-transparent var(--bg-2) */
-  border-top: 1px solid rgba(255,255,255,0.03);
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  background: rgba(13, 17, 32, 0.25);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
 .container {

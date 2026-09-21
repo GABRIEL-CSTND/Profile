@@ -555,59 +555,8 @@ Object.entries(tagTexts).forEach(([id, texts]) => {
   }, 3000 + Math.random() * 1000);
 });
 
-
-// ── Warp Speed Grid — Scroll Reactive ────────────────────────────────────────
-// The grid is a 3D perspective tunnel. Scroll controls how fast lines
-// stream toward the viewer (animation duration on the CSS keyframe).
-//
-// Scroll UP   → lines rush at you faster (shorter duration = warp speed)
-// Scroll DOWN → lines slow to a crawl (longer duration = idle drift)
-
-const WARP_FAST    = 0.3;   // seconds — fastest stream (full warp)
-const WARP_SLOW    = 6;     // seconds — slowest stream (idle)
-const WARP_DEFAULT = 4;     // seconds — resting speed
-const WARP_STEP    = 0.4;   // how much each scroll tick changes duration
-
-let warpDuration = WARP_DEFAULT;
-let warpResetTimer = null;
-
-// Set initial CSS variables
-document.documentElement.style.setProperty('--warp-duration', warpDuration + 's');
-document.documentElement.style.setProperty('--grid-size', '60px');
-document.documentElement.style.setProperty('--grid-line-opacity', '0.06');
-
-window.addEventListener('wheel', (e) => {
-  clearTimeout(warpResetTimer);
-
-  if (e.deltaY < 0) {
-    // Scroll UP → speed up (decrease duration)
-    warpDuration = Math.max(warpDuration - WARP_STEP, WARP_FAST);
-  } else {
-    // Scroll DOWN → slow down (increase duration)
-    warpDuration = Math.min(warpDuration + WARP_STEP, WARP_SLOW);
-  }
-
-  // Brighter lines at higher speed, dimmer when slow
-  const t = 1 - (warpDuration - WARP_FAST) / (WARP_SLOW - WARP_FAST); // 0=slow, 1=fast
-  const opacity = +(0.03 + t * 0.12).toFixed(4);
-
-  document.documentElement.style.setProperty('--warp-duration', warpDuration + 's');
-  document.documentElement.style.setProperty('--grid-line-opacity', opacity);
-
-  // Ease back to idle speed after 1.5s of no scrolling
-  warpResetTimer = setTimeout(() => {
-    const drift = setInterval(() => {
-      const diff = WARP_DEFAULT - warpDuration;
-      if (Math.abs(diff) < 0.05) {
-        warpDuration = WARP_DEFAULT;
-        clearInterval(drift);
-      } else {
-        warpDuration += diff * 0.06;
-      }
-      const tDrift = 1 - (warpDuration - WARP_FAST) / (WARP_SLOW - WARP_FAST);
-      const opDrift = +(0.03 + tDrift * 0.12).toFixed(4);
-      document.documentElement.style.setProperty('--warp-duration', warpDuration + 's');
-      document.documentElement.style.setProperty('--grid-line-opacity', opDrift);
-    }, 16);
-  }, 1500);
-}, { passive: true });
+// ── Moving Grid — constant gentle flow (no scroll interaction) ───────────────
+// The grid animates at a fixed speed. To change the pace, adjust --warp-duration.
+document.documentElement.style.setProperty('--warp-duration', '3s');   // speed of lines
+document.documentElement.style.setProperty('--grid-size', '60px');     // cell size
+document.documentElement.style.setProperty('--grid-line-opacity', '0.07'); // line brightness
