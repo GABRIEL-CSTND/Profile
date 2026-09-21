@@ -557,59 +557,57 @@ Object.entries(tagTexts).forEach(([id, texts]) => {
 
 
 // ── Warp Speed Grid — Scroll Reactive ────────────────────────────────────────
-// Scrolling UP  → grid zooms IN  (cells get bigger = flying forward)
-// Scrolling DOWN → grid zooms OUT (cells get smaller = pulling back)
+// The grid is a 3D perspective tunnel. Scroll controls how fast lines
+// stream toward the viewer (animation duration on the CSS keyframe).
+//
+// Scroll UP   → lines rush at you faster (shorter duration = warp speed)
+// Scroll DOWN → lines slow to a crawl (longer duration = idle drift)
 
-const GRID_MIN      = 20;    // px — smallest cell size (zoomed out / far away)
-const GRID_MAX      = 160;   // px — largest cell size  (zoomed in / up close)
-const GRID_DEFAULT  = 40;    // px — resting state
-const GRID_STEP     = 6;     // px — how much each scroll tick changes the size
+const WARP_FAST    = 0.3;   // seconds — fastest stream (full warp)
+const WARP_SLOW    = 6;     // seconds — slowest stream (idle)
+const WARP_DEFAULT = 4;     // seconds — resting speed
+const WARP_STEP    = 0.4;   // how much each scroll tick changes duration
 
-// Opacity range: brighter lines when zoomed in, dimmer when zoomed out
-const OPACITY_MIN   = 0.02;
-const OPACITY_MAX   = 0.12;
-
-let gridSize = GRID_DEFAULT;
-
-// Helper: map gridSize to a matching line opacity
-function gridOpacity(size) {
-  const t = (size - GRID_MIN) / (GRID_MAX - GRID_MIN); // 0 → 1
-  return +(OPACITY_MIN + t * (OPACITY_MAX - OPACITY_MIN)).toFixed(4);
-}
-
-// Set initial values
-document.documentElement.style.setProperty('--grid-size', gridSize + 'px');
-document.documentElement.style.setProperty('--grid-line-opacity', gridOpacity(gridSize));
-
-// After user stops scrolling for 1.2s, smoothly drift back to default
+let warpDuration = WARP_DEFAULT;
 let warpResetTimer = null;
+
+// Set initial CSS variables
+document.documentElement.style.setProperty('--warp-duration', warpDuration + 's');
+document.documentElement.style.setProperty('--grid-size', '60px');
+document.documentElement.style.setProperty('--grid-line-opacity', '0.06');
 
 window.addEventListener('wheel', (e) => {
   clearTimeout(warpResetTimer);
 
   if (e.deltaY < 0) {
-    // Scroll UP → zoom in (grow cells)
-    gridSize = Math.min(gridSize + GRID_STEP, GRID_MAX);
+    // Scroll UP → speed up (decrease duration)
+    warpDuration = Math.max(warpDuration - WARP_STEP, WARP_FAST);
   } else {
-    // Scroll DOWN → zoom out (shrink cells)
-    gridSize = Math.max(gridSize - GRID_STEP, GRID_MIN);
+    // Scroll DOWN → slow down (increase duration)
+    warpDuration = Math.min(warpDuration + WARP_STEP, WARP_SLOW);
   }
 
-  document.documentElement.style.setProperty('--grid-size', gridSize + 'px');
-  document.documentElement.style.setProperty('--grid-line-opacity', gridOpacity(gridSize));
+  // Brighter lines at higher speed, dimmer when slow
+  const t = 1 - (warpDuration - WARP_FAST) / (WARP_SLOW - WARP_FAST); // 0=slow, 1=fast
+  const opacity = +(0.03 + t * 0.12).toFixed(4);
 
-  // Drift back to default when idle
+  document.documentElement.style.setProperty('--warp-duration', warpDuration + 's');
+  document.documentElement.style.setProperty('--grid-line-opacity', opacity);
+
+  // Ease back to idle speed after 1.5s of no scrolling
   warpResetTimer = setTimeout(() => {
     const drift = setInterval(() => {
-      const diff = GRID_DEFAULT - gridSize;
-      if (Math.abs(diff) < 1) {
-        gridSize = GRID_DEFAULT;
+      const diff = WARP_DEFAULT - warpDuration;
+      if (Math.abs(diff) < 0.05) {
+        warpDuration = WARP_DEFAULT;
         clearInterval(drift);
       } else {
-        gridSize += diff * 0.08; // ease back
+        warpDuration += diff * 0.06;
       }
-      document.documentElement.style.setProperty('--grid-size', gridSize + 'px');
-      document.documentElement.style.setProperty('--grid-line-opacity', gridOpacity(gridSize));
+      const tDrift = 1 - (warpDuration - WARP_FAST) / (WARP_SLOW - WARP_FAST);
+      const opDrift = +(0.03 + tDrift * 0.12).toFixed(4);
+      document.documentElement.style.setProperty('--warp-duration', warpDuration + 's');
+      document.documentElement.style.setProperty('--grid-line-opacity', opDrift);
     }, 16);
-  }, 1200);
+  }, 1500);
 }, { passive: true });

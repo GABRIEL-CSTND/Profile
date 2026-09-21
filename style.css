@@ -611,18 +611,40 @@ body.cursor-hover #cursor-ring {
   100% { transform: translate(8vw, 4vw) scale(1.1); }
 }
 
-/* Subtle Grid — Warp Speed (controlled by --grid-size and --grid-opacity via JS) */
-.bg-grid {
+/* Warp Speed Grid — 3D Perspective Tunnel */
+.bg-grid-wrap {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(34, 211, 238, var(--grid-line-opacity, 0.04)) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, var(--grid-line-opacity, 0.04)) 1px, transparent 1px);
-  background-size: var(--grid-size, 40px) var(--grid-size, 40px);
-  mask-image: radial-gradient(ellipse 80% 80% at center, black 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 80% at center, black 40%, transparent 100%);
-  transition: background-size 0.25s ease, opacity 0.25s ease;
+  /* Push grid below the horizon so it looks like a floor tunnel */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
 }
+
+.bg-grid {
+  position: absolute;
+  /* Wider + taller than viewport so perspective edges don't show */
+  width: 300%;
+  height: 300%;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, var(--grid-line-opacity, 0.06)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, var(--grid-line-opacity, 0.06)) 1px, transparent 1px);
+  background-size: var(--grid-size, 60px) var(--grid-size, 60px);
+  /* 3D perspective tilt — makes it look like a receding tunnel floor */
+  transform: perspective(400px) rotateX(55deg) translateY(10%);
+  transform-origin: center center;
+  /* Stream lines toward viewer by animating background-position */
+  animation: warp-stream var(--warp-duration, 4s) linear infinite;
+  will-change: background-position;
+}
+
+@keyframes warp-stream {
+  from { background-position: 0 0; }
+  to   { background-position: 0 var(--grid-size, 60px); }
+}
+
 
 /* Premium Noise Texture */
 .bg-noise {
