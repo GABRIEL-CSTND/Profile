@@ -665,3 +665,60 @@ document.documentElement.style.setProperty('--grid-line-opacity', '0.07');
   // Initialise
   applyState();
 })();
+
+// ── Contact Form Handler (FormSubmit to castanedag438@gmail.com) ───────────────
+(function () {
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const successMsg = document.getElementById('form-success');
+
+  if (!form || !submitBtn || !successMsg) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !email || !message) return;
+
+    // Show loading state
+    const originalBtnHTML = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Sending...</span>';
+
+    fetch('https://formsubmit.co/ajax/castanedag438@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: message,
+        _subject: `New Portfolio Message from ${name}!`
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+        form.reset();
+        
+        // Show success alert
+        successMsg.style.display = 'block';
+        setTimeout(() => {
+          successMsg.style.display = 'none';
+        }, 6000);
+      })
+      .catch(error => {
+        console.error('Form submission error:', error);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+        alert('Oops! There was a problem sending your message. Please try again or email castanedag438@gmail.com directly.');
+      });
+  });
+})();
+
