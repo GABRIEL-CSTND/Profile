@@ -729,40 +729,57 @@ document.documentElement.style.setProperty('--grid-line-opacity', '0.07');
 
   if (!musicToggle || !bgAudio) return;
 
-  // Set background volume to 15%
-  bgAudio.volume = 0.20;
+  // Set ambient background volume to 15%
+  bgAudio.volume = 0.15;
 
-  function playAudio() {
-    bgAudio.play().catch(() => {
-      // Browser autoplay policy might defer playback until user click
+  function attemptPlay() {
+    if (!musicToggle.checked) return;
+    
+    bgAudio.play().then(() => {
+      // Audio started playing successfully! Remove interaction listeners
+      removeUnlockListeners();
+    }).catch(() => {
+      // Browser blocked autoplay — attach unlock listeners to start on next click/touch
+      addUnlockListeners();
     });
   }
 
   function pauseAudio() {
     bgAudio.pause();
+    removeUnlockListeners();
+  }
+
+  function handleUnlock() {
+    if (musicToggle.checked) {
+      attemptPlay();
+    }
+  }
+
+  function addUnlockListeners() {
+    window.addEventListener('click', handleUnlock);
+    window.addEventListener('touchstart', handleUnlock);
+    window.addEventListener('keydown', handleUnlock);
+    window.addEventListener('scroll', handleUnlock);
+  }
+
+  function removeUnlockListeners() {
+    window.removeEventListener('click', handleUnlock);
+    window.removeEventListener('touchstart', handleUnlock);
+    window.removeEventListener('keydown', handleUnlock);
+    window.removeEventListener('scroll', handleUnlock);
   }
 
   musicToggle.addEventListener('change', function () {
     if (this.checked) {
-      playAudio();
+      attemptPlay();
     } else {
       pauseAudio();
     }
   });
 
-  // Start audio on first user click/touch if toggle is ON
-  function onFirstInteraction() {
-    if (musicToggle.checked && bgAudio.paused) {
-      playAudio();
-    }
-    window.removeEventListener('click', onFirstInteraction);
-    window.removeEventListener('keydown', onFirstInteraction);
-    window.removeEventListener('touchstart', onFirstInteraction);
-  }
-
-  window.addEventListener('click', onFirstInteraction);
-  window.addEventListener('keydown', onFirstInteraction);
-  window.addEventListener('touchstart', onFirstInteraction);
+  // Attempt initial play on page load
+  attemptPlay();
 })();
+
 
 
