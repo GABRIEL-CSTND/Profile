@@ -730,7 +730,7 @@ document.documentElement.style.setProperty('--grid-line-opacity', '0.07');
   if (!musicToggle || !bgAudio) return;
 
   // Set background volume to 15%
-  bgAudio.volume = 0.15;
+  bgAudio.volume = 0.20;
 
   function playAudio() {
     bgAudio.play().catch(() => {
