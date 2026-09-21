@@ -296,9 +296,21 @@ input:checked + .slider:before {
   animation: pulse-green 2s infinite;
 }
 
+.status-dot2 {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: pulse-red 2s infinite;
+}
+
 @keyframes pulse-green {
   0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,.4); }
   50%      { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+}
+
+@keyframes pulse-red {
+  0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
 }
 
 /* ═══════════════════════════════════════
