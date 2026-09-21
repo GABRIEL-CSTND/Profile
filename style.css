@@ -611,16 +611,17 @@ body.cursor-hover #cursor-ring {
   100% { transform: translate(8vw, 4vw) scale(1.1); }
 }
 
-/* Subtle Grid */
+/* Subtle Grid — Warp Speed (controlled by --grid-size and --grid-opacity via JS) */
 .bg-grid {
   position: absolute;
   inset: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+  background-image:
+    linear-gradient(rgba(34, 211, 238, var(--grid-line-opacity, 0.04)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, var(--grid-line-opacity, 0.04)) 1px, transparent 1px);
+  background-size: var(--grid-size, 40px) var(--grid-size, 40px);
+  mask-image: radial-gradient(ellipse 80% 80% at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at center, black 40%, transparent 100%);
+  transition: background-size 0.25s ease, opacity 0.25s ease;
 }
 
 /* Premium Noise Texture */

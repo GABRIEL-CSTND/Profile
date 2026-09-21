@@ -554,3 +554,62 @@ Object.entries(tagTexts).forEach(([id, texts]) => {
     }, 300);
   }, 3000 + Math.random() * 1000);
 });
+
+
+// ── Warp Speed Grid — Scroll Reactive ────────────────────────────────────────
+// Scrolling UP  → grid zooms IN  (cells get bigger = flying forward)
+// Scrolling DOWN → grid zooms OUT (cells get smaller = pulling back)
+
+const GRID_MIN      = 20;    // px — smallest cell size (zoomed out / far away)
+const GRID_MAX      = 160;   // px — largest cell size  (zoomed in / up close)
+const GRID_DEFAULT  = 40;    // px — resting state
+const GRID_STEP     = 6;     // px — how much each scroll tick changes the size
+
+// Opacity range: brighter lines when zoomed in, dimmer when zoomed out
+const OPACITY_MIN   = 0.02;
+const OPACITY_MAX   = 0.12;
+
+let gridSize = GRID_DEFAULT;
+
+// Helper: map gridSize to a matching line opacity
+function gridOpacity(size) {
+  const t = (size - GRID_MIN) / (GRID_MAX - GRID_MIN); // 0 → 1
+  return +(OPACITY_MIN + t * (OPACITY_MAX - OPACITY_MIN)).toFixed(4);
+}
+
+// Set initial values
+document.documentElement.style.setProperty('--grid-size', gridSize + 'px');
+document.documentElement.style.setProperty('--grid-line-opacity', gridOpacity(gridSize));
+
+// After user stops scrolling for 1.2s, smoothly drift back to default
+let warpResetTimer = null;
+
+window.addEventListener('wheel', (e) => {
+  clearTimeout(warpResetTimer);
+
+  if (e.deltaY < 0) {
+    // Scroll UP → zoom in (grow cells)
+    gridSize = Math.min(gridSize + GRID_STEP, GRID_MAX);
+  } else {
+    // Scroll DOWN → zoom out (shrink cells)
+    gridSize = Math.max(gridSize - GRID_STEP, GRID_MIN);
+  }
+
+  document.documentElement.style.setProperty('--grid-size', gridSize + 'px');
+  document.documentElement.style.setProperty('--grid-line-opacity', gridOpacity(gridSize));
+
+  // Drift back to default when idle
+  warpResetTimer = setTimeout(() => {
+    const drift = setInterval(() => {
+      const diff = GRID_DEFAULT - gridSize;
+      if (Math.abs(diff) < 1) {
+        gridSize = GRID_DEFAULT;
+        clearInterval(drift);
+      } else {
+        gridSize += diff * 0.08; // ease back
+      }
+      document.documentElement.style.setProperty('--grid-size', gridSize + 'px');
+      document.documentElement.style.setProperty('--grid-line-opacity', gridOpacity(gridSize));
+    }, 16);
+  }, 1200);
+}, { passive: true });
